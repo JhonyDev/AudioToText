@@ -12,77 +12,49 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="media">
-                                <div class="mr-3">
-                                    {% if request.user.profile_image %}
-                                        <img src="{{ request.user.profile_image.url }}" alt=""
-                                             class="avatar-md rounded-circle img-thumbnail">
-                                    {% else %}
-                                        <img src="{% static 'images/user.png ' %}" alt=""
-                                             class="avatar-md rounded-circle img-thumbnail">
-                                    {% endif %}
-                                </div>
-                                <div class="media-body align-self-center">
-                                    <div class="text-muted">
-                                        <p class="mb-2">Welcome to Project</p>
-                                        <h5 class="mb-1">
-                                            {% if request.user.first_name and request.user.last_name %}
-                                                {{ request.user.first_name }} {{ request.user_last_name }}
-                                            {% else %}
-                                                {{ request.user.username }}
-                                            {% endif %}
-                                        </h5>
-                                        <p class="mb-0 text-danger">
-                                            Customer Account
-                                        </p>
-                                    </div>
-                                </div>
+
+                    <div class="main-Container">
+
+                        <div id="Container">
+
+                            <h3 style="color: red"> {{ error }}</h3>
+
+                            <form method="post" enctype="multipart/form-data">
+                                <input type="file" id="file" class="File" name="file">
+
+                                <br>
+                                <br>
+
+                                <input type="submit" class="btn btn-primary" id="txt" value="Transcribe"/>
+
+                                <select class="selectLanguage" style="margin-left: 20px">
+                                    <option value="">Select Language</option>
+                                    <option value="">English</option>
+                                    <option value="">Urdu</option>
+                                </select>
+
+                            </form>
+                            <br>
+
+                            <div id="speechTranscriptContainer">
+                                <h1>Transcript</h1>
+                                <p></p>
                             </div>
-                        </div>
 
-                        <div class="col-lg-8 align-self-center">
-                            <div class="text-lg-center mt-4 mt-lg-0">
-                                <div class="row text-center">
-                                    <div class="col">
-                                        <div>
-                                            <h2 class="text-muted mb-0">
-                                                <i class="fa fa-users"></i>
-                                            </h2>
-                                            <small>Child Accounts</small>
-                                            <h5 class="mt-2">100</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div>
-                                            <h2 class="text-muted mb-0">
-                                                <i class="fa fa-user-lock"></i>
-                                            </h2>
-                                            <small>Admins</small>
-                                            <h5 class="mt-2">05</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div>
-                                            <h2 class="text-muted mb-0">
-                                                <i class="fa fa-user-check"></i>
-                                            </h2>
-                                            <small>Customers</small>
-                                            <h5 class="mb-0">95</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div>
-                                            <h2 class="text-muted mb-0">
-                                                <i class="fa fa-arrow-circle-down"></i>
-                                            </h2>
-                                            <small>Anything</small>
-                                            <h5 class="mb-0">00</h5>
-                                        </div>
-                                    </div>
+                            <div class="form-group purple-border" style="width:500px;align:center">
+                                <textarea class="form-control" id="textareainput" rows="10"
+                                          cols="20">{{ data }}</textarea>
+                            </div>
+                            <div style=" display:inline;">
+                                <button class="btn btn-primary" id="copyID" style="margin-left: 280px;
+    margin: 12px 0">
+                                    <i class="fa fa-copy"></i>
+                                </button>
 
-                                </div>
+                                <button class="btn btn-primary " id="downloadbutton" style="margin-left: 280px;
+    margin: 12px 0px; ">
+                                    <i class="fa fa-download"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -91,6 +63,34 @@
         </div>
     </div>
 
+
+    <script>
+        const button = document.getElementById("copyID"),
+            input = document.getElementById("textareainput");
+        button.addEventListener("click", function (event) {
+            event.preventDefault();
+            input.select();
+            document.execCommand("copy");
+        });
+        // Start file download.
+        document.getElementById("downloadbutton").addEventListener("click", function () {
+            // Generate download of hello.txt
+            // file with some content
+            const text = document.getElementById("textareainput").value;
+            const filename = "TextareaInput.txt";
+            download(filename, text);
+        }, false);
+
+        function download(file, text) {
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8, ' + encodeURIComponent(text));
+            element.setAttribute('download', file);
+            document.body.appendChild(element);
+            //onClick property
+            element.click();
+            document.body.removeChild(element);
+        }
+    </script>
 
 {% endblock %}
 

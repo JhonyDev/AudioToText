@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from src.portals.customer.models import ConvertRequest
 from .models import User
 
 from django.contrib import admin
@@ -213,6 +215,7 @@ class UserCustomAdmin(admin.ModelAdmin):
 
 # CUSTOM USER
 admin.site.register(User, UserCustomAdmin)
+admin.site.register(ConvertRequest)
 
 admin.site.site_header = "PROJECT | Root admin access"
 admin.site.site_title = "root access"
