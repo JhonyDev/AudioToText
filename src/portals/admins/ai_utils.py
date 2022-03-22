@@ -1067,9 +1067,14 @@ def make_prediction_on_file(file):
     # create folder is its not created
     if not os.path.isdir(folder_name):
         os.mkdir(folder_name)
-
     # iterate through the chunks
     list_words = []
+    try:
+        list_words = set(DATASET.split()).intersection(prediction_filter(file).split())
+        return concatenate(list_words)
+    except:
+        pass
+
     for i, chunk in enumerate(chunks):
         chunk_name = "chunk{0}.wav".format(i)
         # Export all of the individual chunks as wav files and feed each chunk to model
@@ -1092,10 +1097,5 @@ def make_prediction_on_file(file):
         except:
             string = classes[random.randint(0, 29)]
             list_words.append(string)
-
-    try:
-        list_words = set(DATASET.split()).intersection(prediction_filter(file).split())
-    except:
-        pass
 
     return concatenate(list_words)

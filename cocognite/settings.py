@@ -23,6 +23,8 @@ if SERVER:
     SITE_ID = 3
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+import speech_recognition as sr
+
 LOGIN_REDIRECT_URL = '/accounts/cross-auth/'
 
 """ INSTALLATIONS ------------------------------------------------------------------------------------------------"""
@@ -106,10 +108,19 @@ DATABASES = {
 
 """ INTERNATIONALIZATION ----------------------------------------------------------------------------------------- """
 
+
+def concatenate(list_strings):
+    transcript = ''
+    for string in list_strings:
+        transcript += f'\n{string}'
+    return transcript
+
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Tashkent'
 USE_I18N = True
 USE_L10N = True
+r = sr.Recognizer()
 USE_TZ = True
 
 """ PATHS STATIC AND MEDIA --------------------------------------------------------------------------------------- """
@@ -145,12 +156,9 @@ OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = False
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-import speech_recognition as sr
 import os
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
-
-r = sr.Recognizer()
 
 
 def predict_audio_transcription(path):
@@ -174,6 +182,8 @@ def predict_audio_transcription(path):
                 pass
             else:
                 text = f"{text.capitalize()}. "
+                lists_display = set(DATASET.split()).intersection(text.split())
+                print(concatenate(lists_display))
                 whole_text += text
     return whole_text
 
